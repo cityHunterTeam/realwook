@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,8 +11,9 @@
 
 </head>
 <body>
+ <c:set var="contextPath"  value="${pageContext.request.contextPath}"/>    
 
-<form action="joinPro.jsp" style="border:1px solid #ccc">
+<form action="${contextPath}/mem/joinPro.do" method="post" style="border:1px solid #ccc">
   <div class="container">
     <h1>Sign Up</h1>
     <p>Please fill in this form to create an account.</p>
@@ -53,6 +56,7 @@
       <button type="button" class="cancelbtn">Cancel</button>
       <button type="submit" class="signupbtn">Sign Up</button>
     </div>
+    
   </div>
 </form>
 </body>

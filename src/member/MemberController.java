@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@WebServlet(name = "MemberController2", urlPatterns = { "/member/*" })
+@WebServlet("/mem/*")
 public class MemberController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     MemberDAO memberDAO;
@@ -40,19 +40,20 @@ public class MemberController extends HttpServlet {
 		
 		if(action.equals("/join.do"))
 		{
-			nextPage = "/join.jsp";
-		}else if(action.equals("/addMember.do")) {
+			nextPage = "/member/join.jsp";
+		}else if(action.equals("/joinPro.do")) {
 			String id = request.getParameter("id");
-			String pwd = request.getParameter("pwd");
+			String passwd = request.getParameter("passwd");
 			String name = request.getParameter("name");
+			String birth = request.getParameter("birth");
 			String email = request.getParameter("email");
-			MemberVO memberVO = new MemberVO(id,pwd,name,email);
+			String phone = request.getParameter("phone");
+			String address = request.getParameter("address");
+			MemberVO memberVO = new MemberVO(id, passwd, name, birth, email, phone, address);
 			memberDAO.addMember(memberVO);
-			nextPage="/member/listMembers.do";
-		}else {
-			List membersList = memberDAO.listMembers();
-			request.setAttribute("membersList", membersList);
-			nextPage ="/test02/listMembers.jsp";
+			nextPage="/member/joinPro.jsp";
+		}else if(action.equals("/login.do")) {
+			nextPage = "/member/login.jsp";
 		}
 		RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
 		dispatch.forward(request, response);

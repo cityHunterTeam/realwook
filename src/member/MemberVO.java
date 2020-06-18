@@ -4,30 +4,26 @@ import java.sql.Date;
 
 public class MemberVO {
 	private String id;
-	private String pwd;
+	private String passwd;
 	private String name;
+	private String birth;
 	private String email;
-	private Date joinDate;
+	private String phone;
+	private String address;
 	
+	public MemberVO(String id, String passwd, String name, String birth, String email, String phone, String address) {
+		super();
+		this.id = id;
+		this.passwd = passwd;
+		this.name = name;
+		this.birth = birth;
+		this.email = email;
+		this.phone = phone;
+		this.address = address;
+	}
+
 	public MemberVO() {
-		System.out.println("MemberVO 생성자 호출");
 		
-	}
-	
-	public MemberVO(String id, String pwd, String name, String email) {
-		this.id = id;
-		this.pwd = pwd;
-		this.name = name;
-		this.email = email;
-		
-	}
-	
-	public MemberVO(String id,String pwd, String name, String email, Date joinDate) {
-		this.id = id;
-		this.pwd = pwd;
-		this.name = name;
-		this.email = email;
-		this.joinDate = joinDate;
 	}
 
 	public String getId() {
@@ -38,12 +34,12 @@ public class MemberVO {
 		this.id = id;
 	}
 
-	public String getPwd() {
-		return pwd;
+	public String getPasswd() {
+		return passwd;
 	}
 
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
+	public void setPasswd(String passwd) {
+		this.passwd = passwd;
 	}
 
 	public String getName() {
@@ -54,6 +50,14 @@ public class MemberVO {
 		this.name = name;
 	}
 
+	public String getBirth() {
+		return birth;
+	}
+
+	public void setBirth(String birth) {
+		this.birth = birth;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -62,13 +66,23 @@ public class MemberVO {
 		this.email = email;
 	}
 
-	public Date getJoinDate() {
-		return joinDate;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setJoinDate(Date joinDate) {
-		this.joinDate = joinDate;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	
 	
 }
  
