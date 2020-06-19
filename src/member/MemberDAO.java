@@ -21,11 +21,21 @@ public class MemberDAO {
 	//커넥션풀(DataSource)을 얻은 후 ConnecionDB접속
 		private Connection getConnection() throws Exception{
 			Context init = new InitialContext();
-			DataSource ds = (DataSource)init.lookup("java:comp/env/jdbc/jspbeginner");
+			DataSource ds = (DataSource)init.lookup("java:comp/env/jdbc/travel");
 			//커넥션풀에 존재하는 커넥션 얻기
 			Connection con = ds.getConnection();
 			//커넥션 반환
 			return con;
+		}
+		
+		private void freeResource() {
+			try {
+				if(rs != null) {rs.close();}
+				if(pstmt != null) {pstmt.close();}
+				if(con != null) {con.close();}
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
 		}
 
 	
@@ -60,15 +70,64 @@ public class MemberDAO {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			try {
-				if(rs != null) {rs.close();}
-				if(pstmt != null) {pstmt.close();}
-				if(con != null) {con.close();}
-			} catch (SQLException e2) {
-				e2.printStackTrace();
-			}
+			freeResource();
 		}
 	}
+	
+	
+	public int loginCheck(String id,String passwd) {
+		int chk = 0;
+		try {
+			con = getConnection();
+			String query = "select * from member where id = ?";
+			pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+
+			if(rs.next()) {
+				if(rs.getString("passwd").equals(passwd)) {
+					System.out.println(rs.getString("passwd"));
+					System.out.println(passwd);
+					chk = 1;
+				}
+			}
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			freeResource();
+		}
+		
+		return chk;
+	}
+	
+	
+	public MemberVO modifyMember(String id, String passwd) {
+		int check = loginCheck(id,passwd);
+		MemberVO vo = new MemberVO();
+		try {
+			con = getConnection();
+			String query = "select * from member where id = ?";
+			pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+
+			if(rs.next()) {
+				
+			}
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			freeResource();
+		}
+		return vo;
+	}
+	
+	
+	
 	
 
 }

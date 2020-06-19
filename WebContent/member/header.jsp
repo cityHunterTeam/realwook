@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+ <c:set var="contextPath"  value="${pageContext.request.contextPath}"/>    
 
 <!DOCTYPE html>
 <html>
@@ -50,7 +52,15 @@
                             <a href="#"><i class="flaticon-twitter"></i></a>
                             <a href="#"><i class="flaticon-skype"></i></a>
                             <a href="#"><i class="flaticon-instagram"></i></a>
-                            <span><i class="flaticon-phone-call"></i>+880 356 257 142</a></span>
+                            
+							<c:if test="${empty sessionScope.id}">
+                            <span><i class="flaticon-phone-call"></i>로그인 해주세요</a></span>
+                            </c:if>
+                            <c:if test="${not empty sessionScope.id}">
+                            	<c:set var="id" value="${sessionScope.id}"/>
+                             <span><i class="flaticon-phone-call"></i>${id}님 환영합니다.</a></span>
+                             </c:if>
+                            
                         </div>
                     </div>
                 </div>
@@ -61,7 +71,7 @@
                 <div class="row align-items-center ">
                     <div class="col-lg-12">
                         <nav class="navbar navbar-expand-lg navbar-light justify-content-between">
-                            <a class="navbar-brand" href="../index.jsp"> <img src="../img/logo.png" alt="logo"> </a>
+                            <a class="navbar-brand" href="${contextPath}/mem/index.do"> <img src="../img/logo.png" alt="logo"> </a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse"
                                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                 aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +82,7 @@
                                 id="navbarSupportedContent">
                                 <ul class="navbar-nav">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="../index.jsp">Home</a>
+                                        <a class="nav-link" href="${contextPath}/mem/index.do">Home</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="../about.jsp">About</a>
@@ -98,7 +108,7 @@
                                             pages
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="navbarDropdown_1">
-                                            <a class="dropdown-item" href="../top_place.jsp">top place</a>
+                                           <a class="dropdown-item" href="../top_place.jsp">top place</a>
                                             <a class="dropdown-item" href="../tour_details.jsp">tour details</a>
                                             <a class="dropdown-item" href="../elements.jsp">Elements</a>
                                         </div>
@@ -106,6 +116,29 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="../contact.jsp">Contact</a>
                                     </li>
+                                    
+                                    
+                                  <c:if test="${empty sessionScope.id}">  
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="${contextPath}/mem/login.do">Login</a>
+                                    </li>
+                                   </c:if>
+                                   
+                                <c:if test="${not empty sessionScope.id}">
+                            		<li class="nav-item">
+                                        <a class="nav-link" href="${contextPath}/mem/logout.do">Logout</a>
+                                    </li>
+                             	</c:if>
+                               
+                               	<c:if test="${not empty sessionScope.id}">
+                            		<li class="nav-item">
+                                        <a class="nav-link" href="${contextPath}/mem/mypage.do">My page</a>
+                                    </li>
+                             	</c:if>
+                               
+                               
+                               
+                                   
                                 </ul>
                             </div>
                             <a href="#" class="btn_1 d-none d-lg-block">book now</a>

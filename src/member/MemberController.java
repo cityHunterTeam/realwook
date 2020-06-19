@@ -10,6 +10,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.mysql.cj.Session;
 
 
 @WebServlet("/mem/*")
@@ -54,6 +57,25 @@ public class MemberController extends HttpServlet {
 			nextPage="/member/joinPro.jsp";
 		}else if(action.equals("/login.do")) {
 			nextPage = "/member/login.jsp";
+		}else if(action.equals("/loginPro.do")){
+			String id = request.getParameter("id");
+			String passwd = request.getParameter("passwd");
+			int chk = memberDAO.loginCheck(id, passwd);
+			if(chk > 0) {
+				HttpSession session = request.getSession();
+				session.setAttribute("id", id);
+				nextPage ="/member/loginPro.jsp";
+			}else {
+				nextPage = "/member/loginFail.jsp";
+			}		
+		}else if(action.equals("/index.do")) {
+				nextPage="../index.jsp";
+		}else if(action.equals("/logout.do")) {
+				HttpSession session = request.getSession();
+				session.invalidate();
+				nextPage="/member/logout.jsp";
+		}else {
+			nextPage="../index.jsp";
 		}
 		RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
 		dispatch.forward(request, response);
