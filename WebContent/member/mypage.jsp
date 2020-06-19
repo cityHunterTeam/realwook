@@ -46,7 +46,7 @@
    <!--::header part start::-->
 	<jsp:include page="header.jsp"/>
     <!-- Header part end-->
-<!-- 회원가입폼 -->
+<!-- 회원수정폼 -->
  	<jsp:include page="${center}"></jsp:include>
 
     <!-- footer part start-->

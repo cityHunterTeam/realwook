@@ -103,19 +103,23 @@ public class MemberDAO {
 	}
 	
 	
-	public MemberVO modifyMember(String id, String passwd) {
-		int check = loginCheck(id,passwd);
+	public MemberVO selectAll(String id) {
 		MemberVO vo = new MemberVO();
 		try {
 			con = getConnection();
 			String query = "select * from member where id = ?";
 			pstmt = con.prepareStatement(query);
-			
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 
 			if(rs.next()) {
-				
+				vo.setId(rs.getString("id"));
+				vo.setPasswd(rs.getString("passwd"));
+				vo.setName(rs.getString("name"));
+				vo.setAddress(rs.getString("Address"));
+				vo.setBirth(rs.getString("birth"));
+				vo.setPhone(rs.getString("phone"));
+				vo.setEmail(rs.getString("email"));
 			}
 				
 		} catch (Exception e) {
@@ -124,6 +128,31 @@ public class MemberDAO {
 			freeResource();
 		}
 		return vo;
+	}
+	
+	
+	public void updateAll(MemberVO vo) {
+		try {
+			con = getConnection();
+			String query = "update member set id=?,passwd=?,name=?,birth=?,email=?,phone=?,address=?";
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1,vo.getId());
+			 
+			pstmt.setString(2,vo.getPasswd());
+			pstmt.setString(3,vo.getName());
+			pstmt.setString(4,vo.getBirth());
+			pstmt.setString(5,vo.getEmail());
+			pstmt.setString(6,vo.getPhone());
+			pstmt.setString(7,vo.getAddress());
+			
+			pstmt.executeUpdate();	//update 실행 
+
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			freeResource();
+		}
 	}
 	
 	

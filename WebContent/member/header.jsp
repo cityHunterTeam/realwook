@@ -132,7 +132,7 @@
                                
                                	<c:if test="${not empty sessionScope.id}">
                             		<li class="nav-item">
-                                        <a class="nav-link" href="${contextPath}/mem/mypage.do">My page</a>
+                                        <a class="nav-link" href="${contextPath}/mem/myCheck.do">My page</a>
                                     </li>
                              	</c:if>
                                
