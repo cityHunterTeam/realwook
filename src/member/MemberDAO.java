@@ -134,16 +134,15 @@ public class MemberDAO {
 	public void updateAll(MemberVO vo) {
 		try {
 			con = getConnection();
-			String query = "update member set id=?,passwd=?,name=?,birth=?,email=?,phone=?,address=?";
+			String query = "update member set passwd=?,name=?,birth=?,email=?,phone=?,address=?";
 			pstmt = con.prepareStatement(query);
-			pstmt.setString(1,vo.getId());
 			 
-			pstmt.setString(2,vo.getPasswd());
-			pstmt.setString(3,vo.getName());
-			pstmt.setString(4,vo.getBirth());
-			pstmt.setString(5,vo.getEmail());
-			pstmt.setString(6,vo.getPhone());
-			pstmt.setString(7,vo.getAddress());
+			pstmt.setString(1,vo.getPasswd());
+			pstmt.setString(2,vo.getName());
+			pstmt.setString(3,vo.getBirth());
+			pstmt.setString(4,vo.getEmail());
+			pstmt.setString(5,vo.getPhone());
+			pstmt.setString(6,vo.getAddress());
 			
 			pstmt.executeUpdate();	//update 실행 
 
@@ -156,7 +155,22 @@ public class MemberDAO {
 	}
 	
 	
-	
-	
+	public void deleteMem(String id) {
+		try {
+			con = getConnection();
+			String query = "delete from member where id = ?";
+			pstmt = con.prepareStatement(query);
+			 
+			pstmt.setString(1,id);
+			
+			pstmt.executeUpdate();	//delete 실행 
 
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			freeResource();
+		
+		}
+	}
 }

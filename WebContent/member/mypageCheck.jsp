@@ -11,8 +11,12 @@
 <title>Insert title here</title>
 </head>
 <body >
-<form action="${contextPath}/mem/myPage.do" method="post">
-  <h2>비밀번호 재확인</h2>
+<form action="${contextPath}/mem/myPage.do" method="post" style="text-align:center; 
+	height:200px;
+    margin: auto;
+    width: 800px;
+    margin-top: 350px;">
+  <h1>비밀번호 재확인</h1>
   
   <div class="input-container">
     <i class="fa fa-key icon"></i>

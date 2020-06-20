@@ -12,8 +12,15 @@ public class MemberVO {
 	private String address;
 	
 	public MemberVO(String id, String passwd, String name, String birth, String email, String phone, String address) {
-		super();
 		this.id = id;
+		this.passwd = passwd;
+		this.name = name;
+		this.birth = birth;
+		this.email = email;
+		this.phone = phone;
+		this.address = address;
+	}
+	public MemberVO(String passwd, String name, String birth, String email, String phone, String address) {
 		this.passwd = passwd;
 		this.name = name;
 		this.birth = birth;

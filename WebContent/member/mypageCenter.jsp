@@ -20,7 +20,7 @@
     <hr>
 
     <label for="id"><b>Id</b></label>
-    <input type="text" placeholder="Enter Id" name="id" value="${vo.id}" required>
+    <input type="text" placeholder="Enter Id" name="id" value="${vo.id}" readonly>
 
     <label for="psw"><b>Password</b></label>
     <input type="password" placeholder="Enter Password" name="passwd" value="${vo.passwd}" required>
@@ -54,7 +54,7 @@
     <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
 
     <div class="clearfix">
-      <button type="button" class="cancelbtn">회원탈퇴</button>
+      <button type="button" class="cancelbtn" onclick="location.href='${contextPath}/mem/deleteMem.do'">회원탈퇴</button>
       <button type="submit" class="signupbtn">회원정보 수정</button>
     </div>
     

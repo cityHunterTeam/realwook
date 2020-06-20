@@ -103,9 +103,8 @@ public class MemberController extends HttpServlet {
 				nextPage = "/member/mypageFail.jsp";
 			}
 			
-		} else if (action.equals("mypagePro.do")) {
+		} else if (action.equals("/mypagePro.do")) {
 			
-			String id = request.getParameter("id");
 			String passwd = request.getParameter("passwd");
 			String name = request.getParameter("name");
 			String birth = request.getParameter("birth");
@@ -113,12 +112,18 @@ public class MemberController extends HttpServlet {
 			String phone = request.getParameter("phone");
 			String address = request.getParameter("address");
 
-			MemberVO vo2 = new MemberVO(id, passwd, name, birth, email, phone, address);
+			MemberVO vo2 = new MemberVO(passwd, name, birth, email, phone, address);
 			memberDAO.updateAll(vo2);
 			nextPage = "/member/mypagePro.jsp";
 			
-		} else if (action == null) {
-			nextPage = "..index.jsp";
+		} else if(action.equals("/deleteMem.do")) {
+			
+			HttpSession session = request.getSession();
+			String id = (String)session.getAttribute("id");
+			memberDAO.deleteMem(id);
+			session.invalidate();
+			nextPage = "/member/deleteMem.jsp";
+			
 		}
 
 		RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
