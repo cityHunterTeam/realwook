@@ -24,7 +24,7 @@ public class MemberDAO {
 			DataSource ds = (DataSource)init.lookup("java:comp/env/jdbc/travel");
 			//커넥션풀에 존재하는 커넥션 얻기
 			Connection con = ds.getConnection();
-			//커넥션 반환
+			//커넥션 반환12
 			return con;
 		}
 		

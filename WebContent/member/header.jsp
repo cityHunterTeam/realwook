@@ -116,6 +116,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="../contact.jsp">Contact</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="../Mypage/review.jsp">Review</a>
+                                    </li>
                                     
                                     
                                   <c:if test="${empty sessionScope.id}">  

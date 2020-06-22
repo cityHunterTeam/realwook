@@ -39,7 +39,7 @@ public class MemberController extends HttpServlet {
 		String nextPage = null;
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		String action = request.getPathInfo();
+		String action = request.getPathInfo(); //경로를 지정하는 아이
 		System.out.println("action:" + action);
 
 		if (action.equals("/join.do")) {
