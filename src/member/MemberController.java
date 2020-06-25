@@ -111,7 +111,6 @@ public class MemberController extends HttpServlet {
 			String email = request.getParameter("email");
 			String phone = request.getParameter("phone");
 			String address = request.getParameter("address");
-
 			MemberVO vo2 = new MemberVO(passwd, name, birth, email, phone, address);
 			memberDAO.updateAll(vo2);
 			nextPage = "/member/mypagePro.jsp";

@@ -117,7 +117,7 @@
                                         <a class="nav-link" href="../contact.jsp">Contact</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="../Mypage/review.jsp">Review</a>
+                                        <a class="nav-link" href="${contextPath}/mypage/review.do">Review</a>
                                     </li>
                                     
                                     

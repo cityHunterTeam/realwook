@@ -11,17 +11,9 @@ public class ReviewVO {
 	private Date date;
 	private int pos;
 	private int depte;
-	
-	public ReviewVO(String id, int num, String title, String content, Date date, int pos, int depte) {
-		super();
-		this.id = id;
-		this.num = num;
-		this.title = title;
-		this.content = content;
-		this.date = date;
-		this.pos = pos;
-		this.depte = depte;
-	}
+
+
+
 
 	public String getId() {
 		return id;
