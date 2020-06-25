@@ -36,8 +36,7 @@ public class ReviewDAO {
 				}
 			}
 			
-			public void insertReview(ReviewVO vo) throws Exception {
-				con = getConnection();
+			public void insertReview(ReviewVO vo) {
 				String sql = "";
 				
 				try {
@@ -56,9 +55,8 @@ public class ReviewDAO {
 					pstmt.setInt(2, vo.getNum());
 					pstmt.setString(3, vo.getTitle());
 					pstmt.setString(4, vo.getContent());
-					pstmt.setDate(5, vo.getDate());
-					pstmt.setInt(6, vo.getPos());
-					pstmt.setInt(7, vo.getDepte());
+					pstmt.setInt(5, vo.getPos());
+					pstmt.setInt(6, vo.getDepte());
 					
 					pstmt.executeUpdate();
 				} catch(Exception e) {

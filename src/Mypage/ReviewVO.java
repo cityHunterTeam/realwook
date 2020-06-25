@@ -15,6 +15,18 @@ public class ReviewVO {
 
 
 
+
+
+	public ReviewVO() {
+	}
+
+	public ReviewVO(String id, String title, String content) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.content = content;
+	}
+
 	public String getId() {
 		return id;
 	}

@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import member.MemberDAO;
+import member.MemberVO;
 
 
 @WebServlet("/mypage/*")
 public class ReviewController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	ReviewDAO reviewDAO;
-	ReviewVO reviewVO;
+
 
 	
 	public void init(ServletConfig config) throws ServletException {
@@ -61,9 +62,8 @@ public class ReviewController extends HttpServlet {
 			String id = (String)session.getAttribute("id");
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");
-			ReviewVO vo = new ReviewVO();
+			ReviewVO vo = new ReviewVO(id,title,content);
 			reviewDAO.insertReview(vo);
-			
 			nextPage = "/MypageView/review.jsp"; // 글목록 이동
 			
 		}
