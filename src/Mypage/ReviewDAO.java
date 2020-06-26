@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import Mypage.ReviewVO;
 import member.MemberVO;
 
 public class ReviewDAO {
@@ -66,4 +69,58 @@ public class ReviewDAO {
 				}
 				
 			}
+			
+			public int getReviewCount() {//전체글개수
+				
+				String sql="";
+				int count=0;
+				try {
+					con=getConnection();
+					sql="select count(*) from board";
+					pstmt=con.prepareStatement(sql);
+					rs=pstmt.executeQuery();
+					
+					if(rs.next()) {
+						count=rs.getInt(1);
+					}
+				}catch(Exception e) {
+					e.printStackTrace();
+				}finally {
+					freeResource();
+				}
+				return count;
+			}
+			
+			public List<ReviewVO> getReviewList(){//배열
+				
+				
+				String sql="";
+				List<ReviewVO> ReviewList =new ArrayList<ReviewVO>();
+				
+				try {
+					con=getConnection();
+					sql = "select * from board";
+					pstmt=con.prepareStatement(sql);
+					
+					rs=pstmt.executeQuery();
+					
+					while(rs.next()) {
+						ReviewVO vo=new ReviewVO();
+						
+						vo.setNum(rs.getInt("num"));
+						System.out.println(vo.getNum());
+						vo.setTitle(rs.getString("title"));
+						System.out.println(vo.getTitle());
+						vo.setDate(rs.getDate("date"));
+						System.out.println(vo.getDate());
+						
+						ReviewList.add(vo);
+						}
+					}catch(Exception e) {
+						e.printStackTrace();
+					}finally {
+						freeResource();
+					}
+					return ReviewList;
+				}
 }

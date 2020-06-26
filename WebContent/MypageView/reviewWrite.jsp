@@ -55,7 +55,7 @@ tr:nth-child(even) {
 	</div>
 	
     <div class="clearfix">
-      <button type="button" class="cancelbtn">돌아가기</button>
+      <button type="button" class="cancelbtn" onclick="location.href='${contextPath}/mypage/review.do'">돌아가기</button>
       <button type="submit" class="signupbtn">글쓰기</button>
     </div>
     

@@ -1,6 +1,7 @@
 package Mypage;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -64,8 +65,15 @@ public class ReviewController extends HttpServlet {
 			String content = request.getParameter("content");
 			ReviewVO vo = new ReviewVO(id,title,content);
 			reviewDAO.insertReview(vo);
-			nextPage = "/MypageView/review.jsp"; // 글목록 이동
 			
+			nextPage = "/MypageView/review.jsp"; // 글목록 이동(필수)
+			
+		}else if(action.equals("/review.do")) {//글목록 보이기
+			
+			List<ReviewVO> list = reviewDAO.getReviewList();
+			request.setAttribute("ReviewList", list);
+			
+			nextPage = "/MypageView/review.jsp"; //글목록 이동(필수,실행하기위해서?) 
 		}
 		
 		RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
