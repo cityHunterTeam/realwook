@@ -1,6 +1,7 @@
 package Mypage;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class ReviewVO {
 
@@ -8,12 +9,9 @@ public class ReviewVO {
 	private int num;
 	private String title;
 	private String content;
-	private Date date;
+	private Timestamp date;
 	private int pos;
 	private int depte;
-
-
-
 
 
 
@@ -59,11 +57,11 @@ public class ReviewVO {
 		this.content = content;
 	}
 
-	public Date getDate() {
+	public Timestamp getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(Timestamp date) {
 		this.date = date;
 	}
 
@@ -82,5 +80,7 @@ public class ReviewVO {
 	public void setDepte(int depte) {
 		this.depte = depte;
 	}
+
+	
 	
 }

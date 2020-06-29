@@ -44,12 +44,12 @@ public class ReviewDAO {
 				
 				try {
 					con=getConnection();
-					sql = "select max(num) from board";
+					sql = "select max(num) from review";
 					pstmt = con.prepareStatement(sql);
 					rs=pstmt.executeQuery();
 					
 								
-					sql="insert into board "
+					sql="insert into review "
 							+ "(id,num,title,content,"
 							+ "date,pos,depte)"
 							+ "values(?,?,?,?,now(),?,?)";
@@ -76,7 +76,7 @@ public class ReviewDAO {
 				int count=0;
 				try {
 					con=getConnection();
-					sql="select count(*) from board";
+					sql="select count(*) from review";
 					pstmt=con.prepareStatement(sql);
 					rs=pstmt.executeQuery();
 					
@@ -91,36 +91,44 @@ public class ReviewDAO {
 				return count;
 			}
 			
-			public List<ReviewVO> getReviewList(){//배열
-				
-				
-				String sql="";
-				List<ReviewVO> ReviewList =new ArrayList<ReviewVO>();
+			public List<ReviewVO> getReadReviewList(int startRow, int pageSize){
+				String sql = "";
+				List<ReviewVO> reviewList = new ArrayList<ReviewVO>();
 				
 				try {
-					con=getConnection();
-					sql = "select * from board";
-					pstmt=con.prepareStatement(sql);
+					//DB연결 
 					
-					rs=pstmt.executeQuery();
+					con = getConnection();
+					//SQL문 만들기 
+					//정렬 re_ref 내림차순 정렬하여 검색한 후 re_seq 오름차순정렬하여 검색해 오는데 
+					//limit 각 페이지마다 맨위에 첫번째로 보여질 시작글 번호, 한 페이지당 보여줄 글개수 
+					sql = "select * from review order by num desc limit ?,?";
+					
+					pstmt = con.prepareStatement(sql);
+					pstmt.setInt(1, startRow);
+					pstmt.setInt(2, pageSize);
+					rs = pstmt.executeQuery();
 					
 					while(rs.next()) {
-						ReviewVO vo=new ReviewVO();
-						
+						ReviewVO vo = new ReviewVO();
+						//rs=> BoardBean에 저장 
+						vo.setId(rs.getString("id"));
 						vo.setNum(rs.getInt("num"));
-						System.out.println(vo.getNum());
 						vo.setTitle(rs.getString("title"));
-						System.out.println(vo.getTitle());
-						vo.setDate(rs.getDate("date"));
-						System.out.println(vo.getDate());
-						
-						ReviewList.add(vo);
-						}
-					}catch(Exception e) {
-						e.printStackTrace();
-					}finally {
-						freeResource();
-					}
-					return ReviewList;
+						vo.setContent(rs.getString("content"));
+						vo.setDate(rs.getTimestamp("date"));
+						vo.setPos(rs.getInt("pos"));
+						vo.setDepte(rs.getInt("Depte"));
+						 //BoardBean => ArrayList에 추가 
+						 
+						reviewList.add(vo);
+					}//while반복
+				}catch (Exception e) {
+					System.out.println("getReadReviewList메소드에서 예외발생 : " +e);
+					// TODO: handle exception
+				}finally {
+					freeResource();
 				}
+				return reviewList; //ArrayList를 notice.jsp로 리턴 
+			}//getBoardList메소드 끝 
 }
