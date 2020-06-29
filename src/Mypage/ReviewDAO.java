@@ -50,12 +50,13 @@ public class ReviewDAO {
 					
 								
 					sql="insert into review "
-							+ "(id,num,title,content,"
+							+ "(id,num,image,title,content,"
 							+ "date,pos,depte)"
-							+ "values(?,?,?,?,now(),?,?)";
+							+ "values(?,?,?,?,?,now(),?,?)";
 					pstmt=con.prepareStatement(sql);
 					pstmt.setString(1, vo.getId());
 					pstmt.setInt(2, vo.getNum());
+					pstmt.setString(3, vo.getImage());
 					pstmt.setString(3, vo.getTitle());
 					pstmt.setString(4, vo.getContent());
 					pstmt.setInt(5, vo.getPos());
@@ -114,6 +115,7 @@ public class ReviewDAO {
 						//rs=> BoardBean에 저장 
 						vo.setId(rs.getString("id"));
 						vo.setNum(rs.getInt("num"));
+						vo.setImage(rs.getString("image"));
 						vo.setTitle(rs.getString("title"));
 						vo.setContent(rs.getString("content"));
 						vo.setDate(rs.getTimestamp("date"));

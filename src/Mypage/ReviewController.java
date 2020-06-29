@@ -1,12 +1,15 @@
 package Mypage;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,18 +17,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
+
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+
 import member.MemberDAO;
 import member.MemberVO;
 
 
 @WebServlet("/mypage/*")
 public class ReviewController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static String ARTICLE_IMAGE_REPO = "C:\\board\\article_image";
 	ReviewDAO reviewDAO;
 
 
 	
 	public void init(ServletConfig config) throws ServletException {
+		
 		reviewDAO = new ReviewDAO();
 		
 	}
@@ -99,15 +111,37 @@ public class ReviewController extends HttpServlet {
 			nextPage = "/MypageView/reviewWrite.jsp"; 
 			
 		}else if(action.equals("/reviewWritePro.do")) { //글쓰기 처리
-			
+		
 			//값받아오기
-			String id = (String)session.getAttribute("id");
-			String title = request.getParameter("title");
-			String content = request.getParameter("content");
-			ReviewVO vo = new ReviewVO(id,title,content);
+			ServletContext ctx = getServletContext();
+			int articleNO = 0;
+			String realPath = ctx.getRealPath("/upload");
+			int maxSize = 1024*1024*5;
+			MultipartRequest multi = new MultipartRequest
+					(request, realPath, maxSize, "UTF-8", new DefaultFileRenamePolicy());
+			ReviewVO vo = new ReviewVO();
+			
+			String id = multi.getParameter("id");
+			String image = multi.getOriginalFileName("image");
+			String title = multi.getParameter("title");
+			String content = multi.getParameter("content");
+		
+			vo.setId(id);
+			vo.setImage(image);
+			vo.setTitle(title);
+			vo.setContent(content);
+			vo.setDate(new Timestamp(System.currentTimeMillis()));
 			
 			reviewDAO.insertReview(vo);	
-			nextPage = "/mypage/review.do"; // 글목록 이동(필수)
+			System.out.println(id);
+			if (image != null && image.length() != 0) {
+				File srcFile = new File(ARTICLE_IMAGE_REPO + "\\" + "temp" + "\\" + image);
+				File destDir = new File(ARTICLE_IMAGE_REPO + "\\" + articleNO);
+				destDir.mkdirs();
+				FileUtils.moveFileToDirectory(srcFile, destDir, true);
+				srcFile.delete();
+			}
+			nextPage = "/MypageView/review.jsp"; // 글목록 이동(필수)
 			
 		}
 					

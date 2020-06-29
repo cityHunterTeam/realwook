@@ -7,6 +7,7 @@ public class ReviewVO {
 
 	private String id;
 	private int num;
+	private String image;
 	private String title;
 	private String content;
 	private Timestamp date;
@@ -18,11 +19,33 @@ public class ReviewVO {
 	public ReviewVO() {
 	}
 
+	
+
 	public ReviewVO(String id, String title, String content) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.content = content;
+	}
+
+
+
+	public ReviewVO(String id, String image, String title, String content) {
+		super();
+		this.id = id;
+		this.image = image;
+		this.title = title;
+		this.content = content;
+	}
+
+
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public String getId() {

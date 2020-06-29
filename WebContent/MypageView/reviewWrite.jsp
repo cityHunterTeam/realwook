@@ -35,7 +35,7 @@ tr:nth-child(even) {
 
 <br><br><br>
 <div class="container">
-<form action="${contextPath}/mypage/reviewWritePro.do" align="center" color="blue" method="post">
+<form action="${contextPath}/mypage/reviewWritePro.do" align="center" color="blue" method="post" enctype="multipart/form-data">
 <h1>리뷰 글쓰기</h1>
 <p>여행객들의 리뷰를 적는 게시판 입니다.</p>
 	
@@ -44,6 +44,10 @@ tr:nth-child(even) {
     <label for="id" ><b>작성자</b></label>
     <input type="text" id="id" name="id" value="${sessionScope.id}" readonly>
         
+	</div>
+	<div>
+	<label for="image" ><b>이미지</b></label>
+    <input type="file" id="image" name="image">
 	</div>
 	<div>
     <label for="title"><b>제목</b></label>
