@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -31,15 +33,16 @@ import member.MemberVO;
 
 @WebServlet("/mypage/*")
 public class ReviewController extends HttpServlet {
-	private static String ARTICLE_IMAGE_REPO = "C:\\board\\article_image";
+	private static String ARTICLE_IMAGE_REPO = "D:\\git\\TeamProject\\WebContent\\upload";
 	ReviewDAO reviewDAO;
+	ReviewVO vo;
 
 
 	
 	public void init(ServletConfig config) throws ServletException {
 		
 		reviewDAO = new ReviewDAO();
-		
+		vo = new ReviewVO();
 	}
 
 	
@@ -111,29 +114,20 @@ public class ReviewController extends HttpServlet {
 			nextPage = "/MypageView/reviewWrite.jsp"; 
 			
 		}else if(action.equals("/reviewWritePro.do")) { //글쓰기 처리
-		
-			//값받아오기
-			ServletContext ctx = getServletContext();
-			int articleNO = 0;
-			String realPath = ctx.getRealPath("/upload");
-			int maxSize = 1024*1024*5;
-			MultipartRequest multi = new MultipartRequest
-					(request, realPath, maxSize, "UTF-8", new DefaultFileRenamePolicy());
-			ReviewVO vo = new ReviewVO();
 			
-			String id = multi.getParameter("id");
-			String image = multi.getOriginalFileName("image");
-			String title = multi.getParameter("title");
-			String content = multi.getParameter("content");
-		
+			int articleNO = 0;
+			Map<String, String> articleMap = upload(request, response);
+			String id = articleMap.get("id");
+			String image = articleMap.get("image");
+			String title = articleMap.get("title");
+			String content = articleMap.get("content");
+
 			vo.setId(id);
 			vo.setImage(image);
 			vo.setTitle(title);
 			vo.setContent(content);
-			vo.setDate(new Timestamp(System.currentTimeMillis()));
 			
-			reviewDAO.insertReview(vo);	
-			System.out.println(id);
+			articleNO = reviewDAO.insertNewArticle(vo);
 			if (image != null && image.length() != 0) {
 				File srcFile = new File(ARTICLE_IMAGE_REPO + "\\" + "temp" + "\\" + image);
 				File destDir = new File(ARTICLE_IMAGE_REPO + "\\" + articleNO);
@@ -141,16 +135,61 @@ public class ReviewController extends HttpServlet {
 				FileUtils.moveFileToDirectory(srcFile, destDir, true);
 				srcFile.delete();
 			}
-			nextPage = "/MypageView/review.jsp"; // 글목록 이동(필수)
-			
+			PrintWriter pw = response.getWriter();
+			pw.print("<script>" + "  alert('새글을 추가했습니다.');" + " location.href='" + request.getContextPath()
+					+ "/mypage/review.do';" + "</script>");
+
+			return;
+		
 		}
 					
 		
 		RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
 		dispatch.forward(request, response);
-	}
+	}//doHandle
 	
 	
+	private Map<String, String> upload(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Map<String, String> articleMap = new HashMap<String, String>();
+		String encoding = "utf-8";
+		File currentDirPath = new File(ARTICLE_IMAGE_REPO);
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		factory.setRepository(currentDirPath);
+		factory.setSizeThreshold(1024 * 1024);
+		ServletFileUpload upload = new ServletFileUpload(factory);
+		try {
+			List items = upload.parseRequest(request);
+			for (int i = 0; i < items.size(); i++) {
+				FileItem fileItem = (FileItem) items.get(i);
+				if (fileItem.isFormField()) {
+					System.out.println(fileItem.getFieldName() + "=" + fileItem.getString(encoding));
+					articleMap.put(fileItem.getFieldName(), fileItem.getString(encoding));
+				} else {
+					System.out.println("파라미터명:" + fileItem.getFieldName());
+					//System.out.println("파일명:" + fileItem.getName());
+					System.out.println("파일크기:" + fileItem.getSize() + "bytes");
+					//articleMap.put(fileItem.getFieldName(), fileItem.getName());
+					if (fileItem.getSize() > 0) {
+						int idx = fileItem.getName().lastIndexOf("\\");
+						if (idx == -1) {
+							idx = fileItem.getName().lastIndexOf("/");
+						}
 
+						String fileName = fileItem.getName().substring(idx + 1);
+						System.out.println("파일명:" + fileName);
+						//익스플로러에서 업로드 파일의 경로 제거 후 map에 파일명 저장
+						articleMap.put(fileItem.getFieldName(), fileName);  
+						File uploadFile = new File(currentDirPath + "\\temp\\" + fileName);
+						fileItem.write(uploadFile);
+
+					} // end if
+				} // end if
+			} // end for
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return articleMap;
+	}//upload
 
 }

@@ -133,4 +133,43 @@ public class ReviewDAO {
 				}
 				return reviewList; //ArrayList를 notice.jsp로 리턴 
 			}//getBoardList메소드 끝 
+			
+			
+						
+			public int insertNewArticle(ReviewVO article) {
+				int num =0;
+				try {
+					con = getConnection();
+					String title = article.getTitle();
+					String content = article.getContent();
+					String id = article.getId();
+					String image = article.getImage();
+					String query = "INSERT INTO review (id, title, content,image)"
+							+ " VALUES (?, ? ,?, ?)";
+					System.out.println(query);
+					pstmt = con.prepareStatement(query);
+					
+					pstmt.setString(1, id);
+					pstmt.setString(2, title);
+					pstmt.setString(3, content);
+					pstmt.setString(4, image);
+					
+					pstmt.executeUpdate();
+					
+					query = "SELECT  max(num) from review ";
+					System.out.println(query);
+					pstmt = con.prepareStatement(query);
+					ResultSet rs = pstmt.executeQuery(query);
+					if (rs.next())
+						num = rs.getInt(1);
+					
+				
+					pstmt.close();
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				return num;
+			}
 }
