@@ -13,6 +13,7 @@ public class ReviewVO {
 	private Timestamp date;
 	private int pos;
 	private int depte;
+	private int readcount;
 
 
 
@@ -38,7 +39,13 @@ public class ReviewVO {
 		this.content = content;
 	}
 
+	public int getReadcount() {
+		return readcount;
+	}
 
+	public void setReadcount(int readcount) {
+		this.readcount = readcount;
+	}
 
 	public String getImage() {
 		return image;

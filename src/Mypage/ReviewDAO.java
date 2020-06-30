@@ -57,10 +57,10 @@ public class ReviewDAO {
 					pstmt.setString(1, vo.getId());
 					pstmt.setInt(2, vo.getNum());
 					pstmt.setString(3, vo.getImage());
-					pstmt.setString(3, vo.getTitle());
-					pstmt.setString(4, vo.getContent());
-					pstmt.setInt(5, vo.getPos());
-					pstmt.setInt(6, vo.getDepte());
+					pstmt.setString(4, vo.getTitle());
+					pstmt.setString(5, vo.getContent());
+					pstmt.setInt(6, vo.getPos());
+					pstmt.setInt(7, vo.getDepte());
 					
 					pstmt.executeUpdate();
 				} catch(Exception e) {
@@ -112,7 +112,7 @@ public class ReviewDAO {
 					
 					while(rs.next()) {
 						ReviewVO vo = new ReviewVO();
-						//rs=> BoardBean에 저장 
+						//rs=> Boardvo에 저장 
 						vo.setId(rs.getString("id"));
 						vo.setNum(rs.getInt("num"));
 						vo.setImage(rs.getString("image"));
@@ -121,7 +121,7 @@ public class ReviewDAO {
 						vo.setDate(rs.getTimestamp("date"));
 						vo.setPos(rs.getInt("pos"));
 						vo.setDepte(rs.getInt("Depte"));
-						 //BoardBean => ArrayList에 추가 
+						 //Boardvo => ArrayList에 추가 
 						 
 						reviewList.add(vo);
 					}//while반복
@@ -144,15 +144,15 @@ public class ReviewDAO {
 					String content = article.getContent();
 					String id = article.getId();
 					String image = article.getImage();
-					String query = "INSERT INTO review (id, title, content,image)"
-							+ " VALUES (?, ? ,?, ?)";
+					String query = "INSERT INTO review (id,image,title,content,date)"
+							+ " VALUES (?, ? ,?, ?,now())";
 					System.out.println(query);
 					pstmt = con.prepareStatement(query);
 					
 					pstmt.setString(1, id);
-					pstmt.setString(2, title);
-					pstmt.setString(3, content);
-					pstmt.setString(4, image);
+					pstmt.setString(2, image);
+					pstmt.setString(3, title);
+					pstmt.setString(4, content);
 					
 					pstmt.executeUpdate();
 					
@@ -171,5 +171,59 @@ public class ReviewDAO {
 				}
 
 				return num;
+			}
+			
+			public int reviewReadCount(int num) {
+				
+				String sql="";
+			
+				try {
+					con=getConnection();
+					sql="update review set readcount=readcount+1 where num=?";
+					pstmt=con.prepareStatement(sql);
+					pstmt.setInt(1, num);
+					pstmt.executeUpdate();
+				}catch(Exception e) {
+					e.printStackTrace();
+				}finally {
+					if(rs!=null)try {rs.close();}catch(SQLException ex) {}
+					if(pstmt!=null)try {pstmt.close();}catch(SQLException ex) {}
+					if(con!=null)try {con.close();}catch(SQLException ex) {}
+				}
+				return num;
+			}
+			
+			public ReviewVO getupload(int num){
+				
+				ReviewVO vo = null;		
+				try {
+					
+					con = getConnection();
+					
+					String sql = "select * from review where num=?";
+					
+					pstmt = con.prepareStatement(sql);
+					pstmt.setInt(1, num);			
+					rs = pstmt.executeQuery();  			
+					if(rs.next()) {			
+					vo = new ReviewVO();
+					vo.setNum(rs.getInt("num"));
+					vo.setId(rs.getString("id"));
+					vo.setImage(rs.getString("image"));
+					vo.setTitle(rs.getString("title"));
+				 	vo.setContent(rs.getString("content"));
+					vo.setReadcount(rs.getInt("readcount"));
+					vo.setDate(rs.getTimestamp("date"));
+					
+					}
+				} catch (Exception e) {
+					System.out.println("getupload 얻기 실패 : "+e);
+				} finally {
+					freeResource();
+					if(con != null){try {con.close();} catch (Exception e) {e.printStackTrace();}}
+					if(rs != null){try {rs.close();} catch (Exception e) {e.printStackTrace();}}
+					if(pstmt != null){try {pstmt.close();} catch (Exception e) {e.printStackTrace();}}
+				}//finally					
+				return vo; //getupload 끝
 			}
 }

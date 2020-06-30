@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +38,6 @@ public class ReviewController extends HttpServlet {
 	private static String ARTICLE_IMAGE_REPO = "D:\\git\\TeamProject\\WebContent\\upload";
 	ReviewDAO reviewDAO;
 	ReviewVO vo;
-
-
 	
 	public void init(ServletConfig config) throws ServletException {
 		
@@ -74,6 +74,19 @@ public class ReviewController extends HttpServlet {
 			//현재 보여질 페이지번호 가져오기
 			String pageNum = request.getParameter("pageNum");
 			//현재 보여질 페이지번호가 없으면 1페이지 처리
+			/*
+			 * Calendar cal = Calendar.getInstance(); //오늘날짜 구하기 int year =
+			 * cal.get(Calendar.YEAR); int month = cal.get(Calendar.MONTH)+1; int date1 =
+			 * cal.get(Calendar.DATE); String today = "" + year + month + date1;
+			 * System.out.println(today);
+			 */
+			
+			SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+			Calendar cal = Calendar.getInstance();
+			String today = null;
+			today = formatter.format(cal.getTime());
+			Timestamp ts = Timestamp.valueOf(today);
+		
 			if(pageNum == null) {
 				pageNum = "1";
 			}
@@ -91,11 +104,12 @@ public class ReviewController extends HttpServlet {
 				articleList = reviewDAO.getReadReviewList(startRow, pageSize);
 				System.out.println(articleList.size());
 			}
-			
+			int num = 0;
 			int pageCount = count/pageSize+(count%pageSize == 0?0:1);
 			int pageBlock = 5;       
 			int startPage = ((currentPage/pageBlock)-(currentPage%pageBlock == 0?1:0))*pageBlock + 1;
 			int endPage = startPage + pageBlock-1;//시작페이지번호 + 현재블럭에 보여줄 페이지수 -1
+			int readcount = reviewDAO.reviewReadCount(num);
 			
 			if(endPage > pageCount) {
 				endPage = pageCount;
@@ -106,6 +120,7 @@ public class ReviewController extends HttpServlet {
 			request.setAttribute("endPage", endPage);
 			request.setAttribute("pageBlock", pageBlock);
 			request.setAttribute("pageCount",pageCount);
+			request.setAttribute("ts",ts);
 			
 			nextPage = "/MypageView/review.jsp"; //리뷰로 가즈아.
 			
@@ -126,8 +141,10 @@ public class ReviewController extends HttpServlet {
 			vo.setImage(image);
 			vo.setTitle(title);
 			vo.setContent(content);
+			vo.setDate(new Timestamp(System.currentTimeMillis())); //글작성날짜
 			
 			articleNO = reviewDAO.insertNewArticle(vo);
+			
 			if (image != null && image.length() != 0) {
 				File srcFile = new File(ARTICLE_IMAGE_REPO + "\\" + "temp" + "\\" + image);
 				File destDir = new File(ARTICLE_IMAGE_REPO + "\\" + articleNO);
@@ -141,6 +158,15 @@ public class ReviewController extends HttpServlet {
 
 			return;
 		
+		}else if(action.equals("/reviewContent.do")) { //글 상세보기
+			int num = Integer.parseInt(request.getParameter("num"));
+						
+			vo = reviewDAO.getupload(num);	
+			
+			request.setAttribute("vo", vo);
+			
+			
+			nextPage = "/MypageView/reviewContent.jsp"; 
 		}
 					
 		

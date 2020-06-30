@@ -65,10 +65,18 @@ tr:nth-child(even) {
 			<tr align="center">
 				<%--ArticleVO객체의 id변수값 얻어 출력 --%>
 				<th width="5%">${article.num}</th>
-				<th width="8%">${article.title}</th>
+				<th width="8%" onclick="location.href='reviewContent.do?num=${article.num}'">${article.title}</th>
 				<th width="3%">${article.id}</th>
-				<th width="2%"><fmt:formatDate value="${article.date}"/></th>								
-				<th width="1%">조회</th>
+				
+				<fmt:formatDate value="${article.date}" var="ard" pattern="yyyy-MM-dd"/>
+				<fmt:formatDate value="${ts}" var="now" pattern="yyyy-MM-dd"/>				
+				<c:if test="${ard == now}">
+				<th width="2%"><fmt:formatDate value="${article.date}" pattern="kk:mm"/></th>
+				</c:if>
+				<c:if test="${ard != now}"> 
+				<th width="2%"><fmt:formatDate value="${article.date}" pattern="yyyy-MM-dd"/></th>
+				</c:if>
+				<th width="1%">${article.readcount}</th>
 			</tr>
 		</c:forEach>
 	</c:if>
@@ -78,28 +86,30 @@ tr:nth-child(even) {
 			<c:url var="url1" value="/mypage/review.do">
 				<c:param name="pageNum" value="${startPage-pageBlock}"/>
 			</c:url>
-			<a style="font-size: x-large;" class="page-link" href='${url1}'>Previous</a>
+			<a style="font-size: xx-large;" class="page-link" href='${url1}'>Previous</a>
 		</c:if>
 		
 		<c:forEach var="i" begin="${startPage}" end="${endpage}">
 		<c:url var="url2" value="/mypage/review.do">
 		<c:param name="pageNum" value="${i}"/>
 		</c:url>
-			<a style="font-size: x-large;" class="page-link" href='${url2}'>${i}</a>
+			<a style="font-size: xx-large;" class="page-link" href='${url2}'>${i}</a>
 		</c:forEach>
 		
 		<c:if test="${endPage < pageCount}">
 			<c:url var="url3" value="/mypage/review.do">
 				<c:param name="pageNum" value="${startPage+pageBlock}"/>
 			</c:url>
-			<a style="font-size: x-large;" class="page-link" href='${url3}'>Next</a>
+			<a style="font-size: xx-large;" class="page-link" href='${url3}'>Next</a>
 		</c:if>
 	</c:if>
 					
 </table>
 
 <c:if test="${sessionScope.id != null}">
+<div style="text-align:center;">
 	<button type="button" onclick="location.href='${contextPath}/mypage/reviewWrite.do'">글쓰기</button>
+</div>
 </c:if>
 
 
