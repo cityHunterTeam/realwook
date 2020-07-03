@@ -26,7 +26,7 @@
 <c:set var="id" value="${sessionScope.id }"/>
 
 	<div class="container">
-	  <form name="fr" method="post" action="${contextPath }/not/noticeUpdatePro.do">
+	  <form name="fr" method="post" action="${contextPath}/not/noticeUpdatePro.do">
 
 	    <div class="row">
 	      <div class="col-20">
@@ -60,7 +60,8 @@
 	        <textarea id="content" name="content" style="height:300px">${vo.content }</textarea>
 	      </div>
 	    </div>
-	    <br><br>
+	    	<input type="hidden" name="num" value="${num}"/>
+	     <br><br>
 	      <div id = "btnarea">
 			<div class="btn-div">
 				<button type="submit" class="btn wrbtn" id="btn1">수정하기</button>

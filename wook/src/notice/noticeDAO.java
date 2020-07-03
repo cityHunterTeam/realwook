@@ -24,7 +24,7 @@ private Connection getConnection() throws Exception {
 	DataSource ds = (DataSource)init.lookup("java:comp/env/jdbc/travel");
 	con = ds.getConnection();
 	return con;
-	}//getConnection �걹
+	}//getConnection 끝
 private void freeResource() {
 	try {
 		if(rs != null) {rs.close();}
@@ -33,7 +33,7 @@ private void freeResource() {
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
- }//freeResource�걹
+ }//freeResource끝
 public void insertnotice(noticeVO n) {
 	try {
 		con = getConnection();
@@ -49,7 +49,7 @@ public void insertnotice(noticeVO n) {
 		pstmt.setString(4, n.getContent());		
 		pstmt.executeUpdate();								
 	} catch (Exception e) {
-		System.out.println("insertnotice硫붿꽌�뱶�뿉�꽌 �삁�쇅 諛쒖깮 :" + e);
+		System.out.println("insertnotice메서드에서 오류 발생  :" + e);
 	}finally {
 		freeResource();	
 	}
@@ -65,7 +65,7 @@ public int getnoticeCount() {
 			count = rs.getInt(1);
 		}
 	} catch (Exception e) {
-		System.out.println("getnoitceCount硫붿꽌�뱶�뿉�꽌 �삁�쇅 諛쒖깮 : " + e);
+		System.out.println("getnoitceCount메서드에서 오류 발생 : " + e);
 	} finally {
 		freeResource();
 	}
@@ -92,19 +92,19 @@ public List<noticeVO> getnoticeList(int startRow , int pageSize){
 			noticeList.add(v);
 		}
 	} catch (Exception e) {
-		System.out.println("getnoticeList硫붿꽌�뱶�뿉�꽌 �삁�쇅諛쒖깮 : " + e);
+		System.out.println("getnoticeList메서드에서 오류 발생 : " + e);
 	}finally {
 		freeResource();
 	}
 	return noticeList;
-}//getnoticeList�걹
-public int updatenotice(noticeVO vo) {
+}//getnoticeList끝
+public  int updatenotice(noticeVO vo, int num) {
 	int check=0;
 	try {
 		con = getConnection();
 		String qeury = "select passwd from notice where num=?";
 		pstmt = con.prepareStatement(qeury);
-		pstmt.setInt(1, vo.getNum());
+		pstmt.setInt(1, num);
 		rs = pstmt.executeQuery();
 		if(rs.next()) {
 			if(vo.getPasswd().equals(rs.getString("passwd"))) {
@@ -114,13 +114,14 @@ public int updatenotice(noticeVO vo) {
 			pstmt.setString(1, vo.getId());
 			pstmt.setString(2, vo.getTitle());
 			pstmt.setString(3, vo.getContent());
-			pstmt.setInt(4, vo.getNum());
-			}else {
+			pstmt.setInt(4, num);
+			pstmt.executeUpdate();
+		}else {
 				check = 0;
 			}
 		}
 	} catch (Exception e) {
-		System.out.println("updatenotice硫붿꽌�뱶�뿉�꽌 �삁�쇅諛쒖깮:" + e);
+		System.out.println("updatenotice메서드에서 오류 발생:" + e);
 	}finally {
 		freeResource();
 	}
@@ -141,7 +142,7 @@ public void deletenotice(noticeVO vo) {
 		  pstmt.executeUpdate();
 		}
 	} catch (Exception e) {
-		System.out.println("deletenotice硫붿꽌�뱶�뿉�꽌 �삁�쇅諛쒖깮 : " +e);
+		System.out.println("deletenotice메서드에서 오류 발생 : " +e);
 	}finally {
 		freeResource();
 	}
@@ -166,11 +167,11 @@ public noticeVO getnotice(int num) {
 		}
 		
 	} catch (Exception e) {
-		System.out.println("getBoard硫붿꽌�뱶�뿉�꽌 �삁�쇅 諛쒖깮 : " +e);
+		System.out.println("getBoard메서드에서 오류 발생 : " +e);
 	}finally {
 		freeResource();
 		
 	}
 	return vo;
 }
-}//nitceDAO�걹
+}//nitceDAO끝
